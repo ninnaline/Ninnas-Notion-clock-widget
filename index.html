@@ -8,6 +8,24 @@
 
     <style>
 
+        /* =========================================
+           FÄRGER
+           Ändra bara dessa fyra värden om du
+           senare vill byta färger på klockan.
+           ========================================= */
+
+        :root {
+            --box-color: #F7CACB;
+            --number-color: #FFFFFF;
+            --line-color: #FFFFFF;
+            --colon-color: #F7CACB;
+        }
+
+
+        /* =========================================
+           GRUNDINSTÄLLNINGAR
+           ========================================= */
+
         * {
             box-sizing: border-box;
         }
@@ -18,147 +36,113 @@
             padding: 0;
             width: 100%;
             height: 100%;
+            overflow: hidden;
+            background: transparent;
         }
 
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-
-            background: transparent;
         }
+
+
+        /* =========================================
+           HELA KLOCKAN
+           ========================================= */
 
         .clock {
-            width: 100%;
-
+            width: 96%;
             display: flex;
             justify-content: center;
             align-items: center;
-
-            gap: 4%;
+            gap: 3%;
         }
+
+
+        /* =========================================
+           DE TVÅ BOXARNA
+           ========================================= */
 
         .time-box {
-            width: 38%;
-            aspect-ratio: 0.78 / 1;
+            position: relative;
 
-            background-color: #F7CACB;
-
-            border-radius: 18px;
+            width: 44%;
+            aspect-ratio: 0.88 / 1;
 
             display: flex;
             justify-content: center;
             align-items: center;
+
+            background-color: var(--box-color);
+
+            border-radius: clamp(12px, 3vw, 28px);
+
+            overflow: hidden;
         }
 
 
-        /* DIGITALA SIFFROR */
+        /* =========================================
+           SIFFRORNA
+           ========================================= */
 
-        .digit {
+        .time-number {
             position: relative;
+            z-index: 1;
 
-            width: 48%;
-            height: 70%;
+            color: var(--number-color);
 
-            display: block;
+            font-family:
+                "Arial Narrow",
+                "Roboto Condensed",
+                "Helvetica Neue",
+                Arial,
+                sans-serif;
+
+            font-size: clamp(70px, 30vw, 300px);
+            font-weight: 700;
+
+            line-height: 0.8;
+
+            letter-spacing: -0.06em;
+
+            white-space: nowrap;
+
+            transform: scaleX(0.82);
         }
 
 
-        /* Alla segment */
+        /* =========================================
+           FLIP-STRECKET
 
-        .segment {
+           Detta går från kant till kant genom
+           mitten av boxen och siffrorna.
+           ========================================= */
+
+        .flip-line {
             position: absolute;
 
-            background-color: #FFFFFF;
-
-            border-radius: 4px;
-
-            opacity: 0;
-        }
-
-
-        /* Vågräta segment */
-
-        .a,
-        .g,
-        .d {
-            left: 12%;
-            width: 76%;
-            height: 10%;
-        }
-
-        .a {
-            top: 0;
-        }
-
-        .g {
-            top: 45%;
-        }
-
-        .d {
-            bottom: 0;
-        }
-
-
-        /* Lodräta segment */
-
-        .f,
-        .b,
-        .e,
-        .c {
-            width: 10%;
-            height: 38%;
-        }
-
-        .f {
             left: 0;
-            top: 6%;
-        }
+            top: 50%;
 
-        .b {
-            right: 0;
-            top: 6%;
-        }
+            width: 100%;
+            height: clamp(1px, 0.35vw, 3px);
 
-        .e {
-            left: 0;
-            bottom: 6%;
-        }
+            transform: translateY(-50%);
 
-        .c {
-            right: 0;
-            bottom: 6%;
+            background-color: var(--line-color);
+
+            z-index: 2;
+
+            pointer-events: none;
         }
 
 
-        /* Aktiva segment */
+        /* =========================================
+           KOLONET
+           ========================================= */
 
-        .on {
-            opacity: 1;
-        }
-
-
-        /* Strecket genom siffran */
-
-        .middle-line {
-            position: absolute;
-
-            left: 8%;
-            right: 8%;
-
-            top: 49%;
-
-            height: 2px;
-
-            background-color: #FFFFFF;
-
-            opacity: 0.8;
-        }
-
-
-        /* Mellanrum mellan timme och minut */
-
-        .separator {
+        .colon {
             width: 5%;
 
             display: flex;
@@ -167,20 +151,23 @@
             justify-content: center;
             align-items: center;
 
-            gap: 12px;
+            gap: clamp(12px, 4vw, 32px);
+
+            flex-shrink: 0;
         }
 
-        .separator-dot {
-            width: 10px;
-            height: 10px;
+        .colon-dot {
+            width: clamp(7px, 2.2vw, 18px);
+            aspect-ratio: 1 / 1;
 
-            background-color: #F7CACB;
+            background-color: var(--colon-color);
 
             border-radius: 50%;
         }
 
     </style>
 </head>
+
 
 <body>
 
@@ -190,29 +177,24 @@
 
         <div class="time-box">
 
-            <div class="digit" id="hour1">
-
-                <div class="segment a"></div>
-                <div class="segment b"></div>
-                <div class="segment c"></div>
-                <div class="segment d"></div>
-                <div class="segment e"></div>
-                <div class="segment f"></div>
-                <div class="segment g"></div>
-
-                <div class="middle-line"></div>
-
+            <div
+                class="time-number"
+                id="hours">
+                00
             </div>
+
+            <div class="flip-line"></div>
 
         </div>
 
 
-        <!-- SEPARATOR -->
+        <!-- KOLON -->
 
-        <div class="separator">
+        <div class="colon">
 
-            <div class="separator-dot"></div>
-            <div class="separator-dot"></div>
+            <div class="colon-dot"></div>
+
+            <div class="colon-dot"></div>
 
         </div>
 
@@ -221,19 +203,13 @@
 
         <div class="time-box">
 
-            <div class="digit" id="minute1">
-
-                <div class="segment a"></div>
-                <div class="segment b"></div>
-                <div class="segment c"></div>
-                <div class="segment d"></div>
-                <div class="segment e"></div>
-                <div class="segment f"></div>
-                <div class="segment g"></div>
-
-                <div class="middle-line"></div>
-
+            <div
+                class="time-number"
+                id="minutes">
+                00
             </div>
+
+            <div class="flip-line"></div>
 
         </div>
 
@@ -241,43 +217,6 @@
 
 
     <script>
-
-        const numbers = {
-
-            "0": ["a", "b", "c", "d", "e", "f"],
-            "1": ["b", "c"],
-            "2": ["a", "b", "g", "e", "d"],
-            "3": ["a", "b", "g", "c", "d"],
-            "4": ["f", "g", "b", "c"],
-            "5": ["a", "f", "g", "c", "d"],
-            "6": ["a", "f", "g", "e", "c", "d"],
-            "7": ["a", "b", "c"],
-            "8": ["a", "b", "c", "d", "e", "f", "g"],
-            "9": ["a", "b", "c", "d", "f", "g"]
-
-        };
-
-
-        function showDigit(element, number) {
-
-            const segments = element.querySelectorAll(".segment");
-
-            segments.forEach(segment => {
-                segment.classList.remove("on");
-            });
-
-
-            numbers[number].forEach(segmentName => {
-
-                const segment =
-                    element.querySelector("." + segmentName);
-
-                segment.classList.add("on");
-
-            });
-
-        }
-
 
         function updateClock() {
 
@@ -290,22 +229,19 @@
                 String(now.getMinutes()).padStart(2, "0");
 
 
-            showDigit(
-                document.getElementById("hour1"),
-                hours[0]
-            );
+            document.getElementById("hours").textContent =
+                hours;
 
-
-            showDigit(
-                document.getElementById("minute1"),
-                minutes[0]
-            );
-
+            document.getElementById("minutes").textContent =
+                minutes;
         }
 
 
+        // Visa rätt tid direkt
         updateClock();
 
+
+        // Kontrollera tiden varje sekund
         setInterval(updateClock, 1000);
 
     </script>
